@@ -6,7 +6,7 @@ body {
 	background-color: #f5f5f5;
 }
 #outer {
-	border-top: 4px solid #4C7ED1;
+	border-top: 4px solid #000000;
 }
 #inner {
 	margin: 0 auto;
@@ -76,7 +76,7 @@ aside {
 	border-bottom: 2px solid #ccc;
 	font-weight: bold;
 	color: #333;
-	background-color: #f9edbe;
+	background-color: #ffffff;
 	font-size: 18px;
 	margin-bottom: 10px;
 }
