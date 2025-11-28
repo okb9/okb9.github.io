@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水槽の中の、</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/images/icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="page-title">Musics</div>
+        </header>
+
+        <article class="article">
+            <h2>好きな音楽について</h2>
+            <p>
+                手始めに今年良かった音楽とか、買ってよかったアルバムとかをまとめようかな。
+            </p>
+    </main>
+
+<script>
+        // ページの順番定義（子ページも含める）
+        const pageList = [
+
+        ];
+
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-placeholder').innerHTML = data;
+
+                const currentPath = window.location.pathname.split("/").pop() || 'index.html';
+
+                // --- 1. 親メニューの開閉ロジック ---
+                const parents = document.querySelectorAll('.has-submenu > .parent-link');
+                
+                parents.forEach(parent => {
+                    parent.addEventListener('click', (e) => {
+                        e.preventDefault(); // リンク遷移を無効化
+                        const navItem = parent.parentElement;
+                        const submenu = navItem.querySelector('.submenu');
+
+                        // 開閉切り替え
+                        navItem.classList.toggle('open');
+
+                        // アニメーション用：高さを計算して設定
+                        if (navItem.classList.contains('open')) {
+                            submenu.style.maxHeight = submenu.scrollHeight + "px";
+                        } else {
+                            submenu.style.maxHeight = null;
+                        }
+                    });
+                });
+
+                // --- 2. 現在地の判定（子メニュー対応） ---
+                // すべてのリンク（親も子も）をチェック
+                const allLinks = document.querySelectorAll('.nav-menu a');
+
+                allLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    
+                    if (href === currentPath) {
+                        // マッチしたリンク
+                        
+                        // A. もし「子リンク」だったら
+                        if (link.closest('.submenu')) {
+                            link.classList.add('active-child'); // 子リンクを太字に
+                            
+                            // 親メニューを自動で開く
+                            const parentItem = link.closest('.has-submenu');
+                            const submenu = parentItem.querySelector('.submenu');
+                            parentItem.classList.add('active'); // 親の色を変える
+                            parentItem.classList.add('open');   // 親を開く状態にする
+                            submenu.style.maxHeight = submenu.scrollHeight + "px"; // 高さを設定して表示
+                        } 
+                        // B. 通常の親リンクだったら
+                        else {
+                            link.parentElement.classList.add('active');
+                        }
+                    }
+                });
+
+                // --- 3. PREV / NEXT ボタン制御 ---
+                const currentIndex = pageList.indexOf(currentPath);
+                const prevBtn = document.getElementById('btn-prev');
+                const nextBtn = document.getElementById('btn-next');
+
+                if (currentIndex !== -1) {
+                    if (currentIndex > 0) prevBtn.href = pageList[currentIndex - 1];
+                    else prevBtn.classList.add('disabled');
+
+                    if (currentIndex < pageList.length - 1) nextBtn.href = pageList[currentIndex + 1];
+                    else nextBtn.classList.add('disabled');
+                }
+            })
+            .catch(error => console.error('Error loading sidebar:', error));
+    </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   デジタル庁デザインシステム準拠 テーマ設定
+   ========================================================================== */
+:root {
+    /* --- カラーパレット (アクセシビリティ対応) --- */
+    --primary-color: #7084f5;       /* デジタル庁ブルー（リンクや強調） */
+    --primary-hover: #4559cc;       /* ホバー時の濃い青 */
+    --text-color: #1A1A1A;          /* 真っ黒ではなく読みやすい濃いグレー */
+    --text-secondary: #666666;      /* 補足情報のグレー */
+    
+    --bg-body: #F9F9F9;             /* 全体の背景（ごく薄いグレー） */
+    --bg-content: #FFFFFF;          /* コンテンツエリアの背景（白） */
+    --bg-sidebar: #fafafa;          /* サイドバーの背景 */
+    
+    --border-color: #FFFFFF;        /* 境界線の色 */
+    --focus-outline: 4px solid rgba(0, 90, 255, 0.4); /* フォーカスリング */
+}
+
+/* ==========================================================================
+   基本設定 (Base)
+   ========================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    /* デジタル庁推奨のフォントスタック */
+    font-family: "Noto Sans JP", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-body);
+    
+    /* 読みやすさの黄金比 */
+    line-height: 1.75;
+    letter-spacing: 0.05em;
+    font-feature-settings: "palt"; /* 文字詰めを自動調整 */
+    
+    display: flex;
+    min-height: 100vh;
+}
+
+/* リンクの基本スタイル（視認性確保） */
+a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.2s, background-color 0.2s;
+}
+a:hover {
+    color: var(--primary-hover);
+    text-decoration-thickness: 2px;
+}
+
+/* アクセシビリティ：キーボード操作時のフォーカス表示 */
+a:focus-visible, button:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   サイドバー (Sidebar)
+   ========================================================================== */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+/* ブランドロゴエリア */
+.brand { margin-bottom: 40px; }
+.brand-link { text-decoration: none; color: inherit; display: block; }
+.brand-link:hover { opacity: 0.7; text-decoration: none; }
+.brand h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #000;
+    margin-bottom: 5px;
+}
+.brand span {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+}
+
+/* ナビゲーションメニュー */
+.nav-menu { list-style: none; flex-grow: 1; }
+.nav-item { margin-bottom: 16px; }
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-weight: 500;
+    font-size: 15px;
+}
+.nav-link:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* アクティブなメニュー */
+.nav-item.active .nav-link {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* 階層メニュー（アコーディオン） */
+.nav-link .toggle-icon {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-secondary);
+    transition: transform 0.3s ease;
+}
+.nav-item.open .toggle-icon { transform: rotate(180deg); }
+
+.submenu {
+    list-style: none;
+    padding-left: 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    border-left: 1px solid #eee;
+    margin-left: 8px;
+}
+.submenu li { margin: 8px 0; }
+.submenu a {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: block;
+    padding: 4px 0 4px 12px;
+}
+.submenu a:hover, .submenu a.active-child {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* サイドバーフッター（ナビゲーションボタン） */
+.sidebar-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+.sidebar-footer a {
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-color);
+    background-color: #ebebeb;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    padding: 6px 12px;
+    min-width: 60px;
+    text-align: center;
+    transition: all 0.2s;
+}
+.sidebar-footer a:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
+}
+.sidebar-footer a#btn-menu { border: none; background: transparent; }
+.sidebar-footer a#btn-menu:hover { background-color: #eee; }
+.sidebar-footer a.disabled {
+    color: #ccc; border-color: #eee; pointer-events: none;
+}
+
+/* ==========================================================================
+   メインコンテンツ (Main Content)
+   ========================================================================== */
+#sidebar-placeholder {
+    width: 280px; flex-shrink: 0; height: 100vh;
+    background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+    position: sticky; top: 0;
+}
+
+.main-content {
+    flex-grow: 1;
+    background-color: var(--bg-content);
+    padding: 60px 80px;
+    width: 100%;
+}
+
+/* ページヘッダー */
+.content-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 4px solid var(--primary-color); /* デジタル庁風の太線 */
+    padding-bottom: 16px; margin-bottom: 48px;
+}
+.page-title { font-size: 32px; font-weight: 700; letter-spacing: 0.05em; }
+.page-number { font-size: 40px; font-weight: 700; color: #eee; font-family: 'Georgia', serif; line-height: 1; }
+
+/* 記事スタイル */
+.article { margin-bottom: 80px; max-width: 1200px; }
+
+.article h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+    padding-left: 16px;
+    border-left: 6px solid var(--primary-color);
+    line-height: 1.5;
+}
+.article h3 {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+.article p {
+    margin-bottom: 24px;
+    text-align: justify;
+    font-size: 16px;
+}
+
+/* 引用ブロック（コラム風） */
+blockquote {
+    background-color: #F2F6FA; /* 薄いブルーグレー */
+    padding: 24px;
+    border-left: 4px solid var(--primary-color);
+    margin: 32px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* 画像スタイル */
+.hero-image {
+    width: 100%; height: 400px; object-fit: cover;
+    border-radius: 8px; margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* 軽い影をつけて浮き上がらせる */
+}
+.img-placeholder {
+    width: 100%; height: 400px; background-color: #F0F0F0;
+    display: flex; align-items: center; justify-content: center;
+    color: #999; margin-bottom: 32px; border-radius: 8px;
+}
+
+/* テーブルスタイル */
+table {
+    width: 100%; border-collapse: collapse; margin: 32px 0;
+    font-size: 15px; border: 1px solid #ddd;
+}
+th {
+    background-color: #F5F7F9;
+    font-weight: 700;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid #ddd;
+}
+td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+}
+tr:last-child td { border-bottom: none; }
+
+/* 2列レイアウト */
+.two-column {
+    display: flex; gap: 48px; align-items: flex-start; margin-bottom: 40px;
+}
+.col-text { flex: 3; min-width: 0; }
+.col-media { flex: 1; position: sticky; top: 40px; }
+
+/* ==========================================================================
+   レスポンシブ (Mobile)
+   ========================================================================== */
+@media (max-width: 768px) {
+    body { flex-direction: column; }
+    
+    .sidebar {
+        width: 100%; height: auto; position: relative;
+        border-right: none; border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+    }
+    #sidebar-placeholder {
+        width: 100%; height: auto; min-height: 100px;
+        border-right: none; border-bottom: 1px solid var(--border-color);
+        position: static;
+    }
+    
+    .main-content { padding: 40px 20px; }
+    .content-header { margin-bottom: 32px; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .page-title { font-size: 24px; }
+    .page-number { display: none; }
+    
+    .two-column { flex-direction: column; gap: 24px; }
+    .col-media { position: static; width: 100%; }
+    .hero-image, .img-placeholder { height: 200px; }
+    
+    .sidebar-footer { display: none; } /* スマホでは下部ナビ非表示（あるいは調整） */
+}
+/* --- リンクの色を打ち消す汎用クラス --- */
+.silent-link {
+    color: inherit !important; /* 親要素の色を引き継ぐ（強制） */
+    text-decoration: none;
+}
+
+.silent-link:hover,
+.silent-link:visited {
+    color: inherit !important;
+}
+/* ==========================================================================
+   画像拡大（ライトボックス）用スタイル
+   ========================================================================== */
+
+/* 1. クリックできることがわかるようにカーソルを変える */
+.hero-image {
+    cursor: zoom-in;
+    transition: opacity 0.3s;
+}
+.hero-image:hover {
+    opacity: 0.9;
+}
+
+/* 2. 背景の黒い膜（オーバーレイ） */
+#image-modal {
+    display: none; /* 普段は隠す */
+    position: fixed;
+    z-index: 2000; /* サイドバー(z-index:10)より手前に表示 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* 90%透け感のある黒 */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 表示モード（JavaScriptでつけるクラス） */
+#image-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* 3. 拡大される画像 */
+#modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    object-fit: contain; /* 比率を保ったまま画面に収める */
+}
+
+/* 4. 閉じるボタン（×マーク） */
+#modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+}
+/* ==========================================================================
+   画像キャプション（説明文）のスタイル
+   ========================================================================== */
+
+/* 1. 普段の表示（画像の下の文字） */
+figure {
+    margin: 0 0 20px 0; /* 余計な隙間をリセット */
+    width: 100%;
+}
+
+figcaption {
+    font-size: 14px;
+    color: var(--text-secondary); /* デジタル庁グレー */
+    margin-top: 8px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* 2. 拡大表示時の文字（黒背景の上の白文字） */
+#modal-caption {
+    color: #ffffff;
+    font-size: 16px;
+    margin-top: 15px;
+    max-width: 90%;
+    text-align: center;
+    line-height: 1.6;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8); /* 読みやすく影をつける */
+}
+/* ==========================================================================
+   画像拡大（モーダル）のレイアウト調整
+   ========================================================================== */
+
+/* 基本設定（スマホ用：これまで通り縦並び） */
+#image-modal.active {
+    display: flex;
+    flex-direction: column; /* 縦に並べる */
+    opacity: 1;
+    padding: 20px;
+}
+
+#modal-content {
+    max-width: 100%;
+    max-height: 60vh; /* スマホでは高さを抑える */
+    object-fit: contain;
+}
+
+#modal-caption {
+    color: #fff;
+    margin-top: 20px;
+    text-align: center;
+    max-width: 100%;
+}
+
+/* --- パソコン画面（769px以上）でのレイアウト変更 --- */
+@media (min-width: 769px) {
+    #image-modal.active {
+        flex-direction: row; /* ★横並びにする魔法 */
+        gap: 50px;           /* 画像と文字の間隔 */
+        padding: 50px;       /* 画面端からの余白 */
+    }
+
+    #modal-content {
+        max-width: 65%;      /* 画像の幅（画面の65%） */
+        max-height: 90vh;    /* 高さは画面いっぱいまでOK */
+        margin: 0;           /* 余計な余白を消す */
+    }
+
+    #modal-caption {
+        max-width: 30%;      /* 文字の幅（画面の30%） */
+        text-align: left;    /* 左揃えで読みやすく */
+        margin-top: 0;       /* 上の隙間をなくす */
+        
+        /* 文字が多い時にスクロールできるようにする設定 */
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-right: 10px; /* スクロールバーとの隙間 */
+    }
+}

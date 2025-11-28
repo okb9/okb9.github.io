@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水族館の記録</title>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="../../assets/images/icon.png" type="image/png">
+</head>
+<body>
+
+    <div id="sidebar-placeholder"></div>
+
+<main class="main-content">
+        <header class="content-header">
+            <div class="page-title">
+                <a href="../aquariums.html" class="silent-link">Aquarium Log</a>
+            </div>
+        </header>
+
+        <article class="article">
+
+        <article class="article">
+            <h2>アクア・トト岐阜</h2>
+            
+            <div class="two-column">
+                <div class="col-text">
+                    <p>
+                        &emsp;岐阜県各務原市にある大きめの水族館です。世界淡水魚水族館の名前の通り、様々な国の淡水魚がいます。<br>
+                        階層が深いフォルダにファイルを置くときは、リンクの「../」の数に注意が必要です。
+                    </p>
+                </div>
+
+                <div class="col-media">
+                    <figure>
+                        <img src="../../assets/images/toto1.jpg" 
+                            alt="写真" 
+                            class="hero-image"
+                            data-caption="ここはアクア・トト岐阜の入り口です。2025年の春に撮影しました。
+                            週末だったので家族連れが多く、とても賑わっていました。">
+        
+        <figcaption>
+            アクア・トト岐阜のエントランス
+        </figcaption>
+    </figure>
+</div>
+            </div>
+        </article>
+    </main>
+
+<script>
+        // ページの順番定義
+        const pageList = [
+            'home.html',
+            'index.html',
+            'about.html'
+        ];
+
+        // 2階層上からサイドバーを読み込む
+        fetch('../../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                const placeholder = document.getElementById('sidebar-placeholder');
+                placeholder.innerHTML = data;
+
+                // =====================================================
+                // 1. リンクの階層ズレを自動修正する
+                // =====================================================
+                const sidebarLinks = placeholder.querySelectorAll('a');
+                sidebarLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    // 外部リンクや#リンク以外に対し、頭に「../」をつける
+                    if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('javascript')) {
+                        link.setAttribute('href', '../' + href);
+                    }
+                });
+
+                // =====================================================
+                // 2. ★復活★ メニューの開閉ロジック
+                // =====================================================
+                const parents = document.querySelectorAll('.has-submenu > .parent-link');
+                
+                parents.forEach(parent => {
+                    parent.addEventListener('click', (e) => {
+                        e.preventDefault(); // リンク移動を無効化
+                        const navItem = parent.parentElement;
+                        const submenu = navItem.querySelector('.submenu');
+
+                        // 開閉クラスの切り替え
+                        navItem.classList.toggle('open');
+
+                        // アニメーション用の高さ設定
+                        if (navItem.classList.contains('open')) {
+                            submenu.style.maxHeight = submenu.scrollHeight + "px";
+                        } else {
+                            submenu.style.maxHeight = null;
+                        }
+                    });
+                });
+
+                // =====================================================
+                // 3. 現在地の判定（簡易版）
+                // =====================================================
+                // もし「Texts」などの親メニューを最初から開いておきたい場合は、
+                // 手動でクラスをつける処理をここに追加できます。
+                // 今回は「クリックしたら開く」機能までを実装しています。
+
+            })
+            .catch(error => console.error('Error loading sidebar:', error));
+document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. 拡大表示用の箱を作る（キャプション置き場を追加）
+            const modalHTML = `
+                <div id="image-modal">
+                    <span id="modal-close">&times;</span>
+                    <img id="modal-content" src="">
+                    <div id="modal-caption"></div> </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-content');
+            const modalCaption = document.getElementById('modal-caption'); // キャプション
+            const closeBtn = document.getElementById('modal-close');
+            const targetImages = document.querySelectorAll('.hero-image');
+
+// 2. 画像がクリックされたら
+            targetImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    modal.classList.add('active');
+                    modalImg.src = img.src;
+
+                    // ★ここを修正：表示するテキストの優先順位を決める
+                    
+                    // 優先度1: imgタグの data-caption 属性（クリック専用のテキスト）
+                    const dataText = img.getAttribute('data-caption');
+                    
+                    // 優先度2: 画像の下にある figcaption（普段見えているテキスト）
+                    const figure = img.closest('figure');
+                    const normalText = figure ? figure.querySelector('figcaption') : null;
+
+                    if (dataText) {
+                        // data-captionがあれば、それを採用
+                        modalCaption.textContent = dataText;
+                    } else if (normalText) {
+                        // なければ、普段の説明文を採用
+                        modalCaption.textContent = normalText.textContent;
+                    } else {
+                        // それもなければ alt 属性を表示
+                        modalCaption.textContent = img.alt || ""; 
+                    }
+                });
+            });
+
+            // 3. 閉じる動作
+            const closeModal = () => {
+                modal.classList.remove('active');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        });
+    </script>
+</body>
+</html>

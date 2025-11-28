@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水槽の中の、</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/images/icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="page-title">About</div>
+        </header>
+
+        <article class="article">
+            <h2>自分について</h2>
+            
+            <figcaption>著者近影</figcaption>
+            <img 
+                src="../assets/images/Sprite-0001-export.png" 
+                alt="アイコン" 
+                style="
+                    width: 20%; 
+                    height: auto; 
+                    border-radius: 4px; 
+                    margin-bottom: 20px;">
+                    
+
+            <h3>自己紹介</h3>
+            <p>
+                SNSをみて音楽を聴くのが趣味です。
+            </p>
+
+            <blockquote>
+                <strong>Status:</strong><br>
+                このホームページはGeminiにかいてもらいました。内容は人間が手作りしています。
+            </blockquote>
+            <h3>このサイトについて</h3>
+            <p>
+                このサイトは記憶のアーカイブであり、大切なものを忘れてしまわないようにするためのファイルです。
+                昨日のお昼ご飯も、通学中に聴いていた音楽も、きっと忘れてしまうから。
+            </p>
+            <h3>リンク集</h3>
+            <p>
+                お問い合わせはこちらからどうぞ。
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">媒体</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Twitter</td>
+                        <td> <a href="https://x.com/MC_okb09">@MC_okb09</td>
+                    </tr>
+                    <tr>
+                        <td>Bluesky</td>
+                        <td> <a href="https://bsky.app/profile/0kb.bsky.social">@0kb.bsky.social</td>
+                    </tr>
+                    <tr>
+                        <td>Youtube</td>
+                        <td> <a href="https://www.youtube.com/@_okb">@_okb </a></td>
+                    </tr>
+                    <tr>
+                        <td>Mastdon</td>
+                        <td> <a href="https://social.vivaldi.net/@okbb">@okbb</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>mixi</td>
+                        <td> <a href="https://mixi.social/@okb_09">@okb_</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>静かなインターネット</td>
+                        <td> <a href="https://sizu.me/eu">@eu</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>soundcloud</td>
+                        <td> <a href="https://soundcloud.com/okbdayo">@okbdayo</a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+                            <h3>参考にしたもの</h3>
+                <p>
+                    出典：デジタル庁デザインシステムウェブサイト https://design.digital.go.jp/dads/ およびデジタル庁GitHub https://github.com/digital-go-jp
+                </p>
+        </article>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+    </main>
+
+<script>
+        // ページの順番定義（子ページも含める）
+        const pageList = [
+            'home.html',
+            'index.html',
+            'Music.html',
+            'about.html'
+        ];
+
+        fetch('../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-placeholder').innerHTML = data;
+
+                const currentPath = window.location.pathname.split("/").pop() || 'index.html';
+
+                // --- 1. 親メニューの開閉ロジック ---
+                const parents = document.querySelectorAll('.has-submenu > .parent-link');
+                
+                parents.forEach(parent => {
+                    parent.addEventListener('click', (e) => {
+                        e.preventDefault(); // リンク遷移を無効化
+                        const navItem = parent.parentElement;
+                        const submenu = navItem.querySelector('.submenu');
+
+                        // 開閉切り替え
+                        navItem.classList.toggle('open');
+
+                        // アニメーション用：高さを計算して設定
+                        if (navItem.classList.contains('open')) {
+                            submenu.style.maxHeight = submenu.scrollHeight + "px";
+                        } else {
+                            submenu.style.maxHeight = null;
+                        }
+                    });
+                });
+
+                // --- 2. 現在地の判定（子メニュー対応） ---
+                // すべてのリンク（親も子も）をチェック
+                const allLinks = document.querySelectorAll('.nav-menu a');
+
+                allLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    
+                    if (href === currentPath) {
+                        // マッチしたリンク
+                        
+                        // A. もし「子リンク」だったら
+                        if (link.closest('.submenu')) {
+                            link.classList.add('active-child'); // 子リンクを太字に
+                            
+                            // 親メニューを自動で開く
+                            const parentItem = link.closest('.has-submenu');
+                            const submenu = parentItem.querySelector('.submenu');
+                            parentItem.classList.add('active'); // 親の色を変える
+                            parentItem.classList.add('open');   // 親を開く状態にする
+                            submenu.style.maxHeight = submenu.scrollHeight + "px"; // 高さを設定して表示
+                        } 
+                        // B. 通常の親リンクだったら
+                        else {
+                            link.parentElement.classList.add('active');
+                        }
+                    }
+                });
+
+                // --- 3. PREV / NEXT ボタン制御 ---
+                const currentIndex = pageList.indexOf(currentPath);
+                const prevBtn = document.getElementById('btn-prev');
+                const nextBtn = document.getElementById('btn-next');
+
+                if (currentIndex !== -1) {
+                    if (currentIndex > 0) prevBtn.href = pageList[currentIndex - 1];
+                    else prevBtn.classList.add('disabled');
+
+                    if (currentIndex < pageList.length - 1) nextBtn.href = pageList[currentIndex + 1];
+                    else nextBtn.classList.add('disabled');
+                }
+            })
+            .catch(error => console.error('Error loading sidebar:', error));
+    </script>
+</body>
+</html>
