@@ -44,7 +44,6 @@
                             class="hero-image"
                             data-caption="ここはアクア・トト岐阜の入り口です。2025年の春に撮影しました。
                             週末だったので家族連れが多く、とても賑わっていました。">
-        
         <figcaption>
             アクア・トト岐阜のエントランス
         </figcaption>
@@ -91,10 +90,8 @@
                         e.preventDefault(); // リンク移動を無効化
                         const navItem = parent.parentElement;
                         const submenu = navItem.querySelector('.submenu');
-
                         // 開閉クラスの切り替え
                         navItem.classList.toggle('open');
-
                         // アニメーション用の高さ設定
                         if (navItem.classList.contains('open')) {
                             submenu.style.maxHeight = submenu.scrollHeight + "px";
