@@ -1,83 +1,100 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2025-12-18 の日記</title>
-    
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    
-    <meta property="og:title" content="2025-12-18 の日記" />
-    <meta property="og:type" content="article" />
-</head>
-<body>
 
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+
+    <meta property="og:site_name" content="水槽の中の、" />
+    <meta property="og:title" content="2025-12-18 の日記 | 水槽の中の、" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="2025-12-18の日記です。" />
+
+    <meta
+      property="og:url"
+      content="https://okb9.github.io/contents/diary/2025-12-18.html"
+    />
+    <meta
+      property="og:image"
+      content="https://okb9.github.io/assets/images/Sprite-0001-export.png"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
     <div id="sidebar-placeholder"></div>
 
     <main class="main-content">
-        <header class="content-header">
-            <div class="page-title">
-                <a href="../diary.html" class="silent-link">Diary Log</a>
-            </div>
-            <div class="page-number">2025-12-18</div>
-        </header>
+      <header class="content-header">
+        <div class="page-title">
+          <a href="../log.html" class="silent-link">Diary Log</a>
+        </div>
+      </header>
 
-        <article class="article">
-            <h2>タイトル未定</h2>
-            
+      <article class="article">
+        <h2>3限が眠すぎる</h2>
+        <div class="two-column">
+          <div class="col-text">
             <p>
-                ここに今日の日記を書く...
+              &emsp;お昼ご飯を食べた後の異様な眠気は、中学か高校のころから私の脳を深い眠りの中に閉じ込めていた。普段夜寝る際は、自らの意志で布団に入り入眠するわけだが、学校での眠気といえばもはや気絶である。大学に入れば少しはましになるかと思いきや、まったく変わらない。今日も今日とて気づけば時間が飛んでいた。対策としては昼休みに寝る、これしか試していないが、効果はある。ただいつも寝るだけの時間があるわけでもないので、ダメな時もある。(講義をしてくださる先生方には大変申し訳ないが)ちなみに私はカフェインに弱く、昼コーヒーを飲むと夜2,3時まで眠れなくなる。大学でカフェインを摂取したことがないので何とも言えないが、毎回買うのも煩わしい。(金がないので)<br />
+              &emsp;『三体』で有名な劉慈欣の短編集『円』を読んでいる。先日生協で文庫2冊買うと10%offというキャンペーンをやっていたのだが、レジで「割引ありますよね？」と聞かないと適用されないレベルで店員側の認知が足りていなかった。それはさておき、非常に面白い。『三体』は高校生の頃読もうとして挫折したが、こちらはかなり読みやすい気がする。登場人物のほとんどが中国語の名前で出てくるため、名前にフリガナが振ってあるのがとてもありがたい。読みやすさが格段に上がる気がする。現実でもそうだが、人の名前がなかなか覚えられない。読み終わっても覚えていないこともしばしばあるため、人物相関図なんかがあるともっと嬉しい。<br />
+              &emsp;日記の締め方を知らないので、とりあえず今日はこの辺で終わろうと思う。年末は予定が詰まっていて書けそうにないが、細々続けられたらいいと思う。
             </p>
-
-            <div class="two-column">
-                <div class="col-text">
-                    <p>テキスト...</p>
-                </div>
-                <div class="col-media">
-                    <figure>
-                        <img src="../../assets/images/placeholder.jpg" alt="写真" class="hero-image">
-                        <figcaption>キャプション</figcaption>
-                    </figure>
-                </div>
-            </div>
-
-        </article>
+          </div>
+          <div class="col-media">
+            <figure>
+              <img
+                src="../../assets/images/.png"
+                alt="今回は画像無し。一日一枚写真でも撮ろうかな。"
+                class="hero-image"
+                data-caption="twitterより"
+                style="width: 500px; height: auto"
+              />
+              <figcaption></figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
     </main>
 
     <script>
-        // サイドバー読み込み
-        fetch('../../components/sidebar.html')
-            .then(response => response.text())
-            .then(data => {
-                const placeholder = document.getElementById('sidebar-placeholder');
-                placeholder.innerHTML = data;
-                
-                // --- 1. リンクのパス修正 ---
-                const sidebarLinks = placeholder.querySelectorAll('a');
-                sidebarLinks.forEach(link => {
-                    const href = link.getAttribute('href');
-                    if (href && !href.startsWith('http') && !href.startsWith('#')) {
-                        link.setAttribute('href', '../' + href);
-                    }
-                });
+      // サイドバー読み込み
+      fetch("../../components/sidebar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          const placeholder = document.getElementById("sidebar-placeholder");
+          placeholder.innerHTML = data;
 
-                // --- 2. メニュー開閉ロジック (ここが足りていませんでした！) ---
-                const parents = placeholder.querySelectorAll('.has-submenu > .parent-link');
-                parents.forEach(parent => {
-                    parent.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const navItem = parent.parentElement;
-                        const submenu = navItem.querySelector('.submenu');
-                        navItem.classList.toggle('open');
-                        
-                        if (navItem.classList.contains('open')) {
-                            submenu.style.maxHeight = submenu.scrollHeight + "px";
-                        } else {
-                            submenu.style.maxHeight = null;
-                        }
-                    });
-                });
+          // リンク修正
+          const sidebarLinks = placeholder.querySelectorAll("a");
+          sidebarLinks.forEach((link) => {
+            const href = link.getAttribute("href");
+            if (href && !href.startsWith("http") && !href.startsWith("#")) {
+              link.setAttribute("href", "../" + href);
+            }
+          });
+
+          // メニュー開閉
+          const parents = placeholder.querySelectorAll(
+            ".has-submenu > .parent-link"
+          );
+          parents.forEach((parent) => {
+            parent.addEventListener("click", (e) => {
+              e.preventDefault();
+              const navItem = parent.parentElement;
+              const submenu = navItem.querySelector(".submenu");
+              navItem.classList.toggle("open");
+
+              if (navItem.classList.contains("open")) {
+                submenu.style.maxHeight = submenu.scrollHeight + "px";
+              } else {
+                submenu.style.maxHeight = null;
+              }
             });
+          });
+        });
     </script>
-</body>
+  </body>
 </html>

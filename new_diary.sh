@@ -1,24 +1,23 @@
 #!/bin/bash
 
 # --- 設定エリア ---
-# 日記を保存するフォルダ（なければ自動で作ります）
 DIR="contents/diary"
-# 今日の日付を取得 (例: 2025-12-18)
 DATE=$(date +%Y-%m-%d)
-# ファイル名
 FILENAME="${DIR}/${DATE}.html"
+# ★あなたのサイトのURL（ここ重要！OGPには「https://〜」が必要です）
+SITE_URL="https://okb9.github.io"
 
-# --- フォルダがなければ作る ---
+# --- フォルダ作成 ---
 mkdir -p $DIR
 
-# --- ファイルが既にあるかチェック ---
+# --- 重複チェック ---
 if [ -f "$FILENAME" ]; then
     echo "⚠️  $FILENAME は既に存在します。VS Codeで開きます。"
     code "$FILENAME"
     exit 0
 fi
 
-# --- HTMLテンプレートを書き込む ---
+# --- HTMLテンプレート書き込み ---
 cat << EOF > "$FILENAME"
 <!DOCTYPE html>
 <html lang="ja">
@@ -29,8 +28,15 @@ cat << EOF > "$FILENAME"
     
     <link rel="stylesheet" href="../../assets/css/style.css">
     
-    <meta property="og:title" content="${DATE} の日記" />
+    <meta property="og:site_name" content="水槽の中の、" />
+    <meta property="og:title" content="${DATE} の日記 | 水槽の中の、" />
     <meta property="og:type" content="article" />
+    <meta property="og:description" content="${DATE}の日記です。" />
+    
+    <meta property="og:url" content="${SITE_URL}/contents/diary/${DATE}.html" />
+    <meta property="og:image" content="${SITE_URL}/assets/images/Sprite-0001-export.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
 
@@ -39,9 +45,8 @@ cat << EOF > "$FILENAME"
     <main class="main-content">
         <header class="content-header">
             <div class="page-title">
-                <a href="../diary.html" class="silent-link">Diary Log</a>
+                <a href="../log.html" class="silent-link">Diary Log</a>
             </div>
-            <div class="page-number">${DATE}</div>
         </header>
 
         <article class="article">
@@ -74,7 +79,7 @@ cat << EOF > "$FILENAME"
                 const placeholder = document.getElementById('sidebar-placeholder');
                 placeholder.innerHTML = data;
                 
-                // --- 1. リンクのパス修正 ---
+                // リンク修正
                 const sidebarLinks = placeholder.querySelectorAll('a');
                 sidebarLinks.forEach(link => {
                     const href = link.getAttribute('href');
@@ -83,7 +88,7 @@ cat << EOF > "$FILENAME"
                     }
                 });
 
-                // --- 2. メニュー開閉ロジック (ここが足りていませんでした！) ---
+                // メニュー開閉
                 const parents = placeholder.querySelectorAll('.has-submenu > .parent-link');
                 parents.forEach(parent => {
                     parent.addEventListener('click', (e) => {
