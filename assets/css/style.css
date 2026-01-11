@@ -647,3 +647,70 @@ figcaption {
     font-size: 0.85rem;
   }
 }
+
+/* --- 日本地図風タイルレイアウト --- */
+.japan-map-container {
+    display: grid;
+    gap: 15px;
+    margin-top: 30px;
+    
+    /* PC表示：日本地図のようなグリッド配置 
+       (横6マス × 縦4マス の方眼紙をイメージ) */
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, auto);
+    
+    /* エリアの配置定義 (ドット . は空白) */
+    grid-template-areas:
+        ".     .     .     .     .     hokkaido"
+        ".     .     .     kanto .     hokkaido"
+        "chugoku kinki chubu kanto .     ."
+        "kyushu  .     .     .     .     .";
+}
+
+/* スマホ表示：縦一列に戻す */
+@media (max-width: 768px) {
+    .japan-map-container {
+        display: block; /* グリッド解除 */
+    }
+    .area-box {
+        margin-bottom: 20px;
+    }
+}
+
+/* --- タイル（エリア箱）のデザイン --- */
+.area-box {
+    background: #fff;
+    border: 2px solid #eef2f6;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: transform 0.2s;
+}
+
+.area-box:hover {
+    transform: translateY(-3px); /* カーソルを乗せると少し浮く */
+    border-color: #a4c6ff;
+}
+
+.area-box h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #a4c6ff; /* 下線 */
+    color: #005AD1;
+    font-size: 1.1em;
+}
+
+.area-box ul {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 0.9em;
+}
+
+/* --- 各エリアをグリッドの場所に割り当て --- */
+.hokkaido-tohoku { grid-area: hokkaido; }
+.kanto           { grid-area: kanto; }
+.chubu           { grid-area: chubu; }
+.kinki           { grid-area: kinki; }
+.chugoku-shikoku { grid-area: chugoku; }
+.kyushu          { grid-area: kyushu; }

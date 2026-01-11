@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-01-11 の日記</title>
+    
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    
+    <meta property="og:title" content="2026-01-11 の日記" />
+    <meta property="og:type" content="article" />
+</head>
+<body>
+
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="page-title">
+                <a href="../diary.html" class="silent-link">Diary Log</a>
+            </div>
+            <div class="page-number">2026-01-11</div>
+        </header>
+
+        <article class="article">
+            <h2>タイトル未定</h2>
+            
+            <p>
+                ここに今日の日記を書く...
+            </p>
+
+            <div class="two-column">
+                <div class="col-text">
+                    <p>テキスト...</p>
+                </div>
+                <div class="col-media">
+                    <figure>
+                        <img src="../../assets/images/placeholder.jpg" alt="写真" class="hero-image">
+                        <figcaption>キャプション</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+        </article>
+    </main>
+
+    <script>
+        // サイドバー読み込み (2階層上)
+        fetch('../../components/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                const placeholder = document.getElementById('sidebar-placeholder');
+                placeholder.innerHTML = data;
+                
+                // リンク自動修正など
+                const sidebarLinks = placeholder.querySelectorAll('a');
+                sidebarLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                        link.setAttribute('href', '../' + href);
+                    }
+                });
+            });
+    </script>
+    </body>
+</html>

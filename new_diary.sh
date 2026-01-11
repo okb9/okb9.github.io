@@ -1,23 +1,24 @@
 #!/bin/bash
 
 # --- 設定エリア ---
+# 日記を保存するフォルダ（なければ自動で作ります）
 DIR="contents/diary"
+# 今日の日付を取得 (例: 2025-12-18)
 DATE=$(date +%Y-%m-%d)
+# ファイル名
 FILENAME="${DIR}/${DATE}.html"
-# ★あなたのサイトのURL（ここ重要！OGPには「https://〜」が必要です）
-SITE_URL="https://okb9.github.io"
 
-# --- フォルダ作成 ---
+# --- フォルダがなければ作る ---
 mkdir -p $DIR
 
-# --- 重複チェック ---
+# --- ファイルが既にあるかチェック ---
 if [ -f "$FILENAME" ]; then
     echo "⚠️  $FILENAME は既に存在します。VS Codeで開きます。"
     code "$FILENAME"
     exit 0
 fi
 
-# --- HTMLテンプレート書き込み ---
+# --- HTMLテンプレートを書き込む ---
 cat << EOF > "$FILENAME"
 <!DOCTYPE html>
 <html lang="ja">
@@ -28,15 +29,8 @@ cat << EOF > "$FILENAME"
     
     <link rel="stylesheet" href="../../assets/css/style.css">
     
-    <meta property="og:site_name" content="水槽の中の、" />
-    <meta property="og:title" content="${DATE} の日記 | 水槽の中の、" />
+    <meta property="og:title" content="${DATE} の日記" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="${DATE}の日記です。" />
-    
-    <meta property="og:url" content="${SITE_URL}/contents/diary/${DATE}.html" />
-    <meta property="og:image" content="${SITE_URL}/assets/images/Sprite-0001-export.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
 
@@ -45,8 +39,9 @@ cat << EOF > "$FILENAME"
     <main class="main-content">
         <header class="content-header">
             <div class="page-title">
-                <a href="../log.html" class="silent-link">Diary Log</a>
+                <a href="../diary.html" class="silent-link">Diary Log</a>
             </div>
+            <div class="page-number">${DATE}</div>
         </header>
 
         <article class="article">
@@ -72,14 +67,14 @@ cat << EOF > "$FILENAME"
     </main>
 
     <script>
-        // サイドバー読み込み
+        // サイドバー読み込み (2階層上)
         fetch('../../components/sidebar.html')
             .then(response => response.text())
             .then(data => {
                 const placeholder = document.getElementById('sidebar-placeholder');
                 placeholder.innerHTML = data;
                 
-                // リンク修正
+                // リンク自動修正など
                 const sidebarLinks = placeholder.querySelectorAll('a');
                 sidebarLinks.forEach(link => {
                     const href = link.getAttribute('href');
@@ -87,26 +82,9 @@ cat << EOF > "$FILENAME"
                         link.setAttribute('href', '../' + href);
                     }
                 });
-
-                // メニュー開閉
-                const parents = placeholder.querySelectorAll('.has-submenu > .parent-link');
-                parents.forEach(parent => {
-                    parent.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const navItem = parent.parentElement;
-                        const submenu = navItem.querySelector('.submenu');
-                        navItem.classList.toggle('open');
-                        
-                        if (navItem.classList.contains('open')) {
-                            submenu.style.maxHeight = submenu.scrollHeight + "px";
-                        } else {
-                            submenu.style.maxHeight = null;
-                        }
-                    });
-                });
             });
     </script>
-</body>
+    </body>
 </html>
 EOF
 
@@ -118,17 +96,32 @@ code "$FILENAME"
 LOG_FILE="contents/log.html"
 
 if [ -f "$LOG_FILE" ]; then
-    # タイル形式で挿入
-    CARD_TAG="                <li class=\"diary-card\">
-                    <a href=\"diary/${DATE}.html\">
-                        <div class=\"diary-date\">${DATE}</div>
-                        <div class=\"diary-title\">の日記</div>
+    # タイル形式で挿入（複数行を一時ファイルに書き込む方式）
+    # 挿入する内容を一時ファイルに保存
+    TEMP_CARD=$(mktemp)
+    cat > "$TEMP_CARD" << 'CARD_END'
+                <li class="diary-card">
+                    <a href="diary/DATE_PLACEHOLDER.html">
+                        <div class="diary-date">DATE_PLACEHOLDER</div>
+                        <div class="diary-title">の日記</div>
                     </a>
-                </li>"
+                </li>
+CARD_END
+    
+    # DATE_PLACEHOLDERを実際の日付に置換
+    sed -i.bak "s/DATE_PLACEHOLDER/${DATE}/g" "$TEMP_CARD"
+    
+    # log.htmlを一時ファイルにコピーして編集
+    TEMP_LOG=$(mktemp)
     
     # <ul class="diary-grid"> の次の行に挿入
-    sed "/<ul class=\"diary-grid\">/a\\
-$CARD_TAG" "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
+    awk '/<ul class="diary-grid">/ {print; system("cat '"$TEMP_CARD"'"); next} 1' "$LOG_FILE" > "$TEMP_LOG"
+    
+    # 元のファイルに上書き
+    mv "$TEMP_LOG" "$LOG_FILE"
+    
+    # 一時ファイルを削除
+    rm -f "$TEMP_CARD" "${TEMP_CARD}.bak"
     
     echo "🔗 log.html にリンクを追加しました。"
 else
